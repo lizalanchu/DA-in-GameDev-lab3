@@ -211,8 +211,79 @@ behaviors:
 
 
 ## Задание 3
-### Должна ли величина loss стремиться к нулю при изменении исходных данных? Ответьте на вопрос, приведите пример выполнения кода, который подтверждает ваш ответ.
+### 3 Доработайте сцену и обучите ML-Agent таким образом, чтобы шар перемещался между двумя кубами разного цвета. Кубы должны, как и впервом задании, случайно изменять кооринаты на плоскости. В выводах к работе дайте развернутый ответ, что такое игровой баланс и как системы машинного обучения могут быть использованы для того, чтобы его скорректировать.
+ ```py
+ using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Unity.MLAgents;
+using Unity.MLAgents.Sensors;
+using Unity.MLAgents.Actuators;
 
+public class RollerAgent : Agent
+{
+    Rigidbody rBody;
+    // Start is called before the first frame update
+    void Start()
+    {
+        rBody = GetComponent<Rigidbody>();
+    }
+
+    public Transform Target;
+    public Transform Target2;
+    
+
+    public override void OnEpisodeBegin()
+    {
+        if (this.transform.localPosition.y < 0)
+        {
+            this.rBody.angularVelocity = Vector3.zero;
+            this.rBody.velocity = Vector3.zero;
+            this.transform.localPosition = new Vector3(0, 0.5f, 0);
+        }
+
+        Target.localPosition = new Vector3(Random.value * 8-4, 0.5f, Random.value * 8-4);
+        Target2.localPosition = new Vector3(Random.value * 8-4, 0.5f, Random.value * 8-4);
+        
+    }
+    
+    public Vector3 midpointTtoT2;
+
+    public override void CollectObservations(VectorSensor sensor)
+    {
+        midpointTtoT2 = new Vector3((Target.localPosition.x+Target2.localPosition.x)/2.0f,(Target.localPosition.z+Target2.localPosition.z)/2.0f);
+        sensor.AddObservation(Target.localPosition);
+        sensor.AddObservation(Target2.localPosition);
+        sensor.AddObservation(midpointTtoT2);
+        sensor.AddObservation(this.transform.localPosition);
+        sensor.AddObservation(rBody.velocity.x);
+        sensor.AddObservation(rBody.velocity.z);
+    }
+    public float forceMultiplier = 10;
+    public override void OnActionReceived(ActionBuffers actionBuffers)
+    {
+        Vector3 controlSignal = Vector3.zero;
+        controlSignal.x = actionBuffers.ContinuousActions[0];
+        controlSignal.z = actionBuffers.ContinuousActions[1];
+        rBody.AddForce(controlSignal * forceMultiplier);
+
+        midpointTtoT2 = new Vector3((Target.localPosition.x+Target2.localPosition.x)/2.0f,(Target.localPosition.z+Target2.localPosition.z)/2.0f);
+        float distanceTomidpointTtoT2 = Vector3.Distance(this.transform.localPosition, midpointTtoT2);
+
+        if(distanceTomidpointTtoT2 < 1.42f)
+        {
+            SetReward(1.0f);
+            EndEpisode();
+        }
+        else if (this.transform.localPosition.y < 0)
+        {
+            EndEpisode();
+        }
+
+        
+    }
+}
+ ```
 
 ## Выводы
 
