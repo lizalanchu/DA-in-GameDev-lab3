@@ -41,39 +41,85 @@
 
 - Создайте новый пустой 3D проект на Unity.
 
-![Снимок экрана (3)](https://user-images.githubusercontent.com/81166835/194722547-0c1c62c1-4bfb-497c-ba1a-b4ba95feff95.png)
-
--Скачайте папку с ML агентом.
-
-![Снимок экрана (5)](https://user-images.githubusercontent.com/81166835/194722688-83d5bb15-f551-4166-81f4-67df17e6a4f3.png)
+![image](https://user-images.githubusercontent.com/81166835/194754846-5c722d6c-e115-4265-9e00-c5efb6b70019.png)
 
 -В созданный проект добавьте ML Agent, выбрав Window - PackageManager - Add Package from disk. Последовательно добавьте .json – файлы:
 o ml-agents-release_19 / com,unity.ml-agents / package.json
 o ml-agents-release_19 / com,unity.ml-agents.extensions / package.json
 
-![Снимок экрана (6)](https://user-images.githubusercontent.com/81166835/194722823-d75f3af9-6380-4700-a368-f4bd455fdd30.png)
-
-- Если все сделано правильно, то во вкладке с компонентами (Components) внутри Unity вы увидите строку ML Agent.
-
-![Снимок экрана (7)](https://user-images.githubusercontent.com/81166835/194722840-3b3cbca8-4a78-4615-a0a4-d5c1c87db4d2.png)
-
 - Далее запускаем Anaconda Prompt для возможности запуска команд через консоль. Далее пишем серию команд для создания и активации нового ML-агента, а также для скачивания необходимых библиотек:
 o mlagents 0.28.0;
 o torch 1.7.1;
 
-![Снимок экрана (8)](https://user-images.githubusercontent.com/81166835/194722967-f4319622-bbed-49bb-890a-96becab44a4c.png)
+![Снимок экрана (9 1)](https://user-images.githubusercontent.com/81166835/194755097-df4e03a2-92fd-48ec-b912-4729ae767d4d.png)
 
-![Снимок экрана (9)](https://user-images.githubusercontent.com/81166835/194722973-a161c066-2d9b-42b5-b064-337962e87932.png)
-
-![Снимок экрана (10)](https://user-images.githubusercontent.com/81166835/194722956-f4e33d80-be99-42c5-b54f-38062ae5a440.png)
+![Снимок экрана (10 1)](https://user-images.githubusercontent.com/81166835/194755106-80274d0b-5f77-4b49-8c41-8b19a5b106a0.png)
 
 - Создайте на сцене плоскость, куб и сферу. Создайте простой C# скрипт-файл и подключите его к сфере:
 
 ![Снимок экрана (11)](https://user-images.githubusercontent.com/81166835/194723087-0e0debfc-7306-4c4d-8cd9-b405d5c8e1d5.png)
 
+- В скрипт-файл RollerAgent.cs добавьте код, опубликованный в материалах лабораторных работ
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Unity.MLAgents;
+using Unity.MLAgents.Sensors;
+using Unity.MLAgents.Actuators;
+
+public class RollerAgent : Agent
+{
+    Rigidbody rBody;
+    // Start is called before the first frame update
+    void Start()
+    {
+        rBody = GetComponent<Rigidbody>();
+    }
+
+    public Transform Target;
+    public override void OnEpisodeBegin()
+    {
+        if (this.transform.localPosition.y < 0)
+        {
+            this.rBody.angularVelocity = Vector3.zero;
+            this.rBody.velocity = Vector3.zero;
+            this.transform.localPosition = new Vector3(0, 0.5f, 0);
+        }
+
+        Target.localPosition = new Vector3(Random.value * 8-4, 0.5f, Random.value * 8-4);
+    }
+    public override void CollectObservations(VectorSensor sensor)
+    {
+        sensor.AddObservation(Target.localPosition);
+        sensor.AddObservation(this.transform.localPosition);
+        sensor.AddObservation(rBody.velocity.x);
+        sensor.AddObservation(rBody.velocity.z);
+    }
+    public float forceMultiplier = 10;
+    public override void OnActionReceived(ActionBuffers actionBuffers)
+    {
+        Vector3 controlSignal = Vector3.zero;
+        controlSignal.x = actionBuffers.ContinuousActions[0];
+        controlSignal.z = actionBuffers.ContinuousActions[1];
+        rBody.AddForce(controlSignal * forceMultiplier);
+
+        float distanceToTarget = Vector3.Distance(this.transform.localPosition, Target.localPosition);
+
+        if(distanceToTarget < 1.42f)
+        {
+            SetReward(1.0f);
+            EndEpisode();
+        }
+        else if (this.transform.localPosition.y < 0)
+        {
+            EndEpisode();
+        }
+    }
+}
 - Объекту «сфера» добавить компоненты Decision Requester, Behavior Parameters
 
-![Снимок экрана (12)](https://user-images.githubusercontent.com/81166835/194723131-51f25296-bece-46fc-98c8-599e97f1a3d3.png)
+![Снимок экрана (12 1)](https://user-images.githubusercontent.com/81166835/194755184-5ba5b4b8-bf67-4992-9df3-5b38e3f2826d.png)
 
 - В корень проекта добавьте файл конфигурации нейронной сети
 
