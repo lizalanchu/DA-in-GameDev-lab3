@@ -61,6 +61,7 @@ o torch 1.7.1;
 
 - В скрипт-файл RollerAgent.cs добавьте код, опубликованный в материалах лабораторных работ
 
+- ```py
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -117,6 +118,9 @@ public class RollerAgent : Agent
         }
     }
 }
+
+-```
+
 - Объекту «сфера» добавить компоненты Decision Requester, Behavior Parameters
 
 ![Снимок экрана (12 1)](https://user-images.githubusercontent.com/81166835/194755184-5ba5b4b8-bf67-4992-9df3-5b38e3f2826d.png)
