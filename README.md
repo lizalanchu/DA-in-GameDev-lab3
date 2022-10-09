@@ -61,7 +61,7 @@ o torch 1.7.1;
 
 - В скрипт-файл RollerAgent.cs добавьте код, опубликованный в материалах лабораторных работ
 
-- ```py
+```py
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -118,8 +118,7 @@ public class RollerAgent : Agent
         }
     }
 }
-
--```
+```
 
 - Объекту «сфера» добавить компоненты Decision Requester, Behavior Parameters
 
@@ -127,7 +126,31 @@ public class RollerAgent : Agent
 
 - В корень проекта добавьте файл конфигурации нейронной сети
 
-![Снимок экрана (13)](https://user-images.githubusercontent.com/81166835/194729985-cb21dc24-1d97-4290-bded-83983673915b.png)
+```py
+behaviors:
+  RollerBall:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 10
+      buffer_size: 100
+      learning_rate: 3.0e-4
+      beta: 5.0e-4
+      epsilon: 0.2
+      lambd: 0.99
+      num_epoch: 3
+      learning_rate_schedule: linear
+    network_settings:
+      normalize: false
+      hidden_units: 128
+      num_layers: 2
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+    max_steps: 500000
+    time_horizon: 64
+    summary_freq: 10000
+```
 
 - Запустите работу ml-агента
 
@@ -154,80 +177,42 @@ public class RollerAgent : Agent
 ![Снимок экрана (37)](https://user-images.githubusercontent.com/81166835/194754239-3ca855b9-d47e-4abf-8ea8-e8cee72f2a8c.png)
 
 https://clipchamp.com/watch/KcbyAKNE2bf
+
 - Сделайте выводы.
 ## Задание 2
 ### Пошагово выполнить каждый пункт раздела "ход работы" с описанием и примерами реализации задач
-Ход работы:
-- Произвести подготовку данных для работы с алгоритмом линейной регрессии. 10 видов данных были установлены случайным образом, и данные находились в линейной зависимости. Данные преобразуются в формат массива, чтобы их можно было вычислить напрямую при использовании умножения и сложения.
 
-![2022-09-25_13-57-29](https://user-images.githubusercontent.com/81166835/192153967-49e1a9d2-e9de-4bec-9d06-95aa5927ff9b.png)
-
-- Определите связанные функции. Функция модели: определяет модель линейной регрессии wx+b. Функция потерь: функция потерь среднеквадратичной ошибки. Функция оптимизации: метод градиентного спуска для нахождения частных производных w и b.
-
-![2022-09-25_20-19-07](https://user-images.githubusercontent.com/81166835/192156549-f3278ae3-8614-4c4f-9860-ffa34ccfedf7.png)
-
-Начать итерацию
-   - Шаг 1. Инициализация и модель итеративной оптимизации
-
-![2022-09-25_21-40-15](https://user-images.githubusercontent.com/81166835/192161078-7ff610d7-9a06-4bc7-9110-23cab7e29edb.png)
-
-   - Шаг 2 На второй итерации отображаются значения параметров, значения потерь и эффекты визуализации после итерации
-
-![2022-09-25_21-40-23](https://user-images.githubusercontent.com/81166835/192161087-7750b6cc-5012-49e8-8172-781a765128cb.png)
-
-   - Шаг 3 Третья итерация показывает значения параметров, значения потерь и визуализацию после итерации
-
-![2022-09-25_21-40-30](https://user-images.githubusercontent.com/81166835/192161101-e722c8e6-e59a-4444-9c7f-3764c0fcc26a.png)
-
-   - Шаг 4 На четвертой итерации отображаются значения параметров, значения потерь и эффекты визуализации
-
-![2022-09-25_21-40-37](https://user-images.githubusercontent.com/81166835/192161105-6f12405c-4400-42ed-a58d-c950e5e16816.png)
-
-   - Шаг 5 Пятая итерация показывает значение параметра, значение потерь и эффект визуализации после итерации
-
-![2022-09-25_21-40-44](https://user-images.githubusercontent.com/81166835/192161113-16d818b7-b010-45e0-a502-665c999db1e3.png)
-
-   - Шаг 6 10000-я итерация, показывающая значения параметров, потери и визуализацию после итерации
-
-![2022-09-25_21-40-49](https://user-images.githubusercontent.com/81166835/192161121-2e4cd43f-304b-49e4-ab1d-ea7d7f1a767b.png)
+```py
+behaviors:
+  RollerBall:
+    trainer_type: ppo
+    hyperparameters:
+      batch_size: 10
+      buffer_size: 100
+      learning_rate: 3.0e-4
+      beta: 5.0e-4
+      epsilon: 0.2
+      lambd: 0.99
+      num_epoch: 3
+      learning_rate_schedule: linear
+    network_settings:
+      normalize: false
+      hidden_units: 128
+      num_layers: 2
+    reward_signals:
+      extrinsic:
+        gamma: 0.99
+        strength: 1.0
+    max_steps: 500000
+    time_horizon: 64
+    summary_freq: 10000
+```
 
 
 
 ## Задание 3
 ### Должна ли величина loss стремиться к нулю при изменении исходных данных? Ответьте на вопрос, приведите пример выполнения кода, который подтверждает ваш ответ.
 
-Да, должна, так как с каждой итерацией модель постепенно "обучается". А соответственно функция потерь стремится к нулю.
-
-1 итерация:
-
-![2022-09-26_00-59-16](https://user-images.githubusercontent.com/81166835/192167517-3727216b-07e3-4456-a7ae-1bf0eb6902e9.png)
-
-10000 итерация:
-
-![2022-09-26_00-59-30](https://user-images.githubusercontent.com/81166835/192167506-35ab7bde-71be-49af-bfd3-27136d29c801.png)
-
-### Какова роль параметра Lr? Ответьте на вопрос, приведите пример выполнения кода, который подтверждает ваш ответ. В качестве эксперимента можете изменить значение параметра.
-
-Параметр Lr отвечает за "обучение" модели. Чем больше этот параметр, тем быстрее модель обучается, а значит функция потерь меньше
-
-При Lr=0.000001, функция потерь практчески не уменьшилась
-1 итерация:
-
-![2022-09-26_01-45-18](https://user-images.githubusercontent.com/81166835/192169289-efb467c7-2e0d-4e84-8eba-01763b8c4ac5.png)
-
-5 итерация:
-
-![2022-09-26_01-46-23](https://user-images.githubusercontent.com/81166835/192169299-13c925ee-97a3-45e2-b089-2823efd67d6b.png)
-
-При Lr=0.0001, функция потерь заметно уменьшилась, уже на второй итерации
-
-1 итерация:
-
-![2022-09-26_01-47-02](https://user-images.githubusercontent.com/81166835/192169350-44ed3f6c-d86c-4998-95bd-31901736937f.png)
-
-2 итерация:
-
-![2022-09-26_01-47-08](https://user-images.githubusercontent.com/81166835/192169356-0943f314-9ead-44c3-940c-a1f696d27ee2.png)
 
 ## Выводы
 
