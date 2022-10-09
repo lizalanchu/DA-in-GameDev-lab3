@@ -287,6 +287,7 @@ public class RollerAgent : Agent
  ```
 
 https://clipchamp.com/watch/IfEWtK5FInY
+
 https://clipchamp.com/watch/Y1jLU1he43h
 
 Данная модель обучается дольше, не всегда проходит между кубиков и часто выпадает с поля
