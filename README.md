@@ -81,11 +81,29 @@ o torch 1.7.1;
 
 - Запустите работу ml-агента
 
-![Снимок экрана (14)](https://user-images.githubusercontent.com/81166835/194729991-237c6cab-67d5-4af6-9f09-ebf21774c52d.png)
+![Снимок экрана (15 1)](https://user-images.githubusercontent.com/81166835/194754553-ec0a1776-2c71-41da-9820-d87992b622eb.png)
 
-- Вернитесь в проект Unity, запустите сцену, проверьте работу ML-Agent’a.
-- Сделайте 3, 9, 27 копий модели «Плоскость-Сфера-Куб», запустите симуляцию сцены и наблюдайте за результатом обучения модели.
+- Вернитесь в проект Unity, запустите сцену, проверьте работу ML-Agent’a
+
+![Снимок экрана (27)](https://user-images.githubusercontent.com/81166835/194754305-afd4a263-11f2-4eae-8e24-ec08d702e4a6.png)
+
+![Снимок экрана (28)](https://user-images.githubusercontent.com/81166835/194754309-96459bcc-90bd-4998-a530-d3ed15cfeb23.png)
+
+![Снимок экрана (29)](https://user-images.githubusercontent.com/81166835/194754330-bd12d40c-3ab2-4664-b156-b2427472b102.png)
+
+- Сделайте 3, 9, 27 копий модели «Плоскость-Сфера-Куб», запустите симуляцию сцены и наблюдайте за результатом обучения модели
+
+![Снимок экрана (30)](https://user-images.githubusercontent.com/81166835/194754284-c40389bc-e771-4b5e-8d0c-e2d0af702c18.png)
+
+![Снимок экрана (31)](https://user-images.githubusercontent.com/81166835/194754370-024425ce-167b-41eb-ad95-124f70ca2d68.png)
+
 - После завершения обучения проверьте работу модели.
+
+![Снимок экрана (32)](https://user-images.githubusercontent.com/81166835/194754219-3c7f0ca6-a15b-415f-9497-9c0cfbde4794.png)
+
+![Снимок экрана (37)](https://user-images.githubusercontent.com/81166835/194754239-3ca855b9-d47e-4abf-8ea8-e8cee72f2a8c.png)
+
+https://clipchamp.com/watch/KcbyAKNE2bf
 - Сделайте выводы.
 ## Задание 2
 ### Пошагово выполнить каждый пункт раздела "ход работы" с описанием и примерами реализации задач
